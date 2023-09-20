@@ -1,52 +1,89 @@
-//add todo by submitting form
-//mark todo as completed
-//remove a todo
-// const form = document.querySelector("form");
-// form.addEventListener("submit", function(e) {
-//     console.log("Submitted!");
- 
-// });
+// //add todo by submitting form
+// //mark todo as completed
+// //remove a todo
 
+// document.addEventListener("DOMContentLoaded", function(){
 
-const form = document.querySelector("form");
-const toDoList = document.querySelector('#toDoList')
+const form = document.querySelector("newTodoForm");
+const toDoList = document.querySelector('#toDoList');
 
-form.addEventListener("submit", function(event) {
+// //retrieve from localStorage
+const savedList = JSON.parse(localStorage.getItem('todos')) || [];
+for(let i = 0; i < savedList.length; i++){
+  let newTask = document.createElement('li');
+  newTask.innerHTML = savedList[i].item;
+  toDoList.appendChild(newTask);
+  // newTask.isCompleted = savedList[i].isCompleted ? true : false;
+  // if(newTask.isCompleted) {
+  //   newLi.style.textDecoration = "line-through";
+  };
+
+//Create new todo when submitted
+newTodoForm.addEventListener("submit", function(event) {
   event.preventDefault();
+  let newLi = document.createElement('li');
+  let newToDoInput = document.querySelector('#item').value;
+  newLi.innerText = newToDoInput;
+  newLi.isCompleted = false;
 
-  const newToDoInput = document.querySelector('#todoForm');
-
-  const newLi = document.createElement('li');
-
-  const removeButton = document.createElement('button');
-  removeButton.innerText = "Nevermind";
-
-  const completeButton = document.createElement('button');
-  completeButton.innerText = "Completed?";
-
-  newLi.innerText = newToDoInput.value;
-  
-  newLi.append(completeButton);
-  newLi.append(removeButton);
+  newTodoForm.reset();
   toDoList.append(newLi);
-  form.reset();
+  //change state of completion
+  let completeButton = document.createElement('button');
+  completeButton.innerText = "Completed";
+  completeButton.addEventListener('click', function(e){
+    if((newLi.style.textDecoration == "line-through") === false){
+      newLi.style.textDecoration = "line-through";
+      newLi.isCompleted = true;
+    } else {
+      newLi.style.textDecoration = "";
+      newLi.isCompleted = false;
+        }
+      });
+  newLi.append(completeButton);
 
+  // remove list item
+  let removeButton = document.createElement('button');
+  removeButton.innerText = "Remove";
   removeButton.addEventListener('click', function(e) {
-    e.target.parentElement.remove();
+      e.target.parentElement.remove();
+    })
+  newLi.append(removeButton)
+   //save to localStorage
+  savedList.push({ item: newLi.innerHTML, isCompleted: false});
+  localStorage.setItem('todos', JSON.stringify(savedList));
   });
-  completeButton.addEventListener('click', function(e) {
-    console.log(newLi);
-    newLi.style.textDecoration = "line-through";
-  })
+  
+;
 
+
+  //Update localStorage Status of remove or completed
   
 
-//   console.log(newLi);
-//   const jsonNL = JSON.stringify(newLi.innerHTML);
-//   console.log(jsonNL);
+// //Add or remove Completed Status
+// completeButton.addEventListener('click', function(e){
+//   let listItem = e.target.parentNode;
+//   console.log("is this working");
+//   if(listItem.isCompleted = false){
+//     listItem.style.textDecoration = "line-through";
+//     listItem.isCompleted = true;
+//   } else {
+//     listItem.style.textDecoration = 'none';
+//     listItem.isCompleted = false;
+//   }})
+//   console.log(listItem.isCompleted);
+  
 
-//   localStorage.setItem('newLi', jsonNL);
+// })
 
-//   console.log(newToDoInput.value);
-//   console.log("You submitted " + newToDoInput.value);
-});
+  //save to localStorage
+  
+  // completeButton.addEventListener('click', function(e){
+  //   if((newLi.style.textDecoration == "line-through") === false){
+  //       newLi.style.textDecoration = "line-through";
+  //   } else {
+  //       newLi.style.textDecoration = "";
+  //   }
+  // });
+
+//save to localStorage
